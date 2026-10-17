@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ทบทวนแฟลชการ์ด</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Thai:wght@400;600&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef3f1;--surface:#fff;--ink:#17302b;--mute:#5d746e;--line:#cfdcd7;--accent:#0e7c66;--accent-ink:#fff;--warn:#b4533a;--ok:#0e7c66;--card-back:#e3f1ec;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b18;--surface:#17282418;--ink:#e6f2ee;--mute:#93aca5;--line:#2c4540;--accent:#3fc3a4;--accent-ink:#06211b;--warn:#e58a70;--ok:#3fc3a4;--card-back:#1d3731}}
+:root[data-theme="dark"]{--bg:#0f1b18;--surface:#172824;--ink:#e6f2ee;--mute:#93aca5;--line:#2c4540;--accent:#3fc3a4;--accent-ink:#06211b;--warn:#e58a70;--ok:#3fc3a4;--card-back:#1d3731}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--surface:#172824}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:16px/1.5 "Noto Sans Thai","Noto Sans JP",system-ui,sans-serif}
+.app{max-width:640px;margin:0 auto;padding:16px}
+h1{font-size:1.25rem;margin:0 0 12px}
+.tabs{display:flex;gap:6px;margin-bottom:16px}
+.tabs button{flex:1}
+button,select,textarea{font:inherit;color:var(--ink)}
+button{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;min-height:44px}
+button:hover{border-color:var(--accent)}
+button.on,button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+button:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+textarea{min-height:200px;resize:vertical;font-family:ui-monospace,monospace;font-size:.9rem}
+label{display:block;font-size:.85rem;color:var(--mute);margin-bottom:4px}
+.row{display:flex;gap:10px;margin:12px 0;flex-wrap:wrap}
+.row>*{flex:1;min-width:130px}
+.hint{font-size:.85rem;color:var(--mute);margin:6px 0}
+.msg{margin:10px 0;font-weight:600}
+.card{perspective:1000px;margin:8px 0 14px;cursor:pointer;min-height:260px;position:relative}
+.face{position:absolute;inset:0;border-radius:18px;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;text-align:center;padding:24px;font-size:1.9rem;line-height:1.35;backface-visibility:hidden;transition:transform .35s;overflow:auto;word-break:break-word}
+.front{background:var(--surface)}
+.back{background:var(--card-back);transform:rotateY(180deg)}
+.card.flip .front{transform:rotateY(180deg)}
+.card.flip .back{transform:rotateY(0)}
+@media (prefers-reduced-motion:reduce){.face{transition:none}}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:6px 0 4px}
+.bar i{display:block;height:100%;background:var(--accent);width:0}
+.meta{display:flex;justify-content:space-between;font-size:.85rem;color:var(--mute)}
+.ctl{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.ctl.two{grid-template-columns:1fr 1fr}
+.know{color:var(--ok)}.dont{color:var(--warn)}
+.empty{text-align:center;padding:40px 10px;color:var(--mute)}
+.hide{display:none}
+.tabs button{padding:8px 2px;font-size:.85rem}
+.opts{display:grid;gap:8px;margin:12px 0}
+.opt{text-align:left;padding:14px;font-size:1.1rem}
+.opt.right{background:var(--ok);color:var(--accent-ink);border-color:var(--ok)}
+.opt.wrong{background:var(--warn);color:var(--bg);border-color:var(--warn)}
+.opt.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.qt{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;font-size:1.7rem;line-height:1.35;text-align:center;margin:10px 0;display:flex;gap:10px;align-items:center;justify-content:center;word-break:break-word}
+.qt button{min-width:44px;padding:6px 10px}
+.rv{border:1px solid var(--line);border-radius:10px;padding:10px;margin:8px 0;background:var(--surface)}
+h2{font-size:1.15rem;margin:0 0 4px}
+#qFb{white-space:pre-line}
+.tabs{flex-wrap:wrap}.tabs button{flex:1 1 auto;min-width:56px;font-size:.8rem}
+select,textarea,input[type=text]{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px;width:100%}
+input[type=text]{font-size:1.15rem;min-height:48px}input[type=text]:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+button.sm{min-height:36px;padding:4px 10px;font-size:.85rem;margin-bottom:6px}
+.hub{display:grid;gap:10px;margin:12px 0}.gcard{text-align:left;padding:14px 16px;display:block;width:100%}.gcard b{display:block;font-size:1.05rem}.gcard span{color:var(--mute);font-size:.85rem}
+.gcard:disabled{opacity:.5;cursor:default}
+.mgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin:12px 0}@media(min-width:520px){.mgrid{grid-template-columns:repeat(4,1fr)}}
+.tile{min-height:80px;font-size:1.15rem;padding:8px;word-break:break-word;transition:opacity .25s}
+.tile.sel{border-color:var(--accent);box-shadow:inset 0 0 0 2px var(--accent)}
+.tile.good{background:var(--ok);color:var(--accent-ink);border-color:var(--ok)}
+.tile.bad{background:var(--warn);color:var(--bg);border-color:var(--warn);animation:shk .3s}
+.tile.done{opacity:0;pointer-events:none}
+@keyframes shk{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+@media(prefers-reduced-motion:reduce){.tile.bad{animation:none}.tile{transition:none}}
+#tfA,#tfB{font-size:1.7rem;line-height:1.3}.qt.ok{border-color:var(--ok);box-shadow:inset 0 0 0 2px var(--ok)}.qt.no{border-color:var(--warn);box-shadow:inset 0 0 0 2px var(--warn)}
+.cfg{margin:8px 0}.cfg summary{cursor:pointer;min-height:44px;display:flex;align-items:center}.cfg details{border:1px solid var(--line);border-radius:10px;padding:0 12px 12px}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>ทบทวนแฟลชการ์ด</h1>
+<div class="tabs"><button id="tImp" class="on">นำเข้า</button><button id="tStudy">ทบทวน</button><button id="tQuiz">เลือกตอบ</button><button id="tTest">ทดสอบ</button><button id="tGame">เกม</button><button id="tMng">จัดการ</button></div>
+
+<section id="vImp">
+  <label for="txt">วางข้อความที่ export จาก Quizlet หรือแอปอื่น (1 บรรทัด = 1 โน้ต แต่ละช่องคั่นด้วยตัวคั่น)</label>
+  <textarea id="txt" placeholder="apple&#9;แอปเปิล&#10;猫&#9;แมว&#10;ขอบคุณ&#9;ありがとう"></textarea>
+  <div class="row">
+    <div><label for="sep">ตัวคั่นช่อง</label>
+      <select id="sep"><option value="tab">Tab (ค่าเริ่มต้นของ Quizlet)</option><option value="comma">จุลภาค ( , )</option><option value="dash">ขีดกลาง ( - )</option><option value="semi">semicolon ( ; )</option><option value="eq">เท่ากับ ( = )</option><option value="colon">โคลอน ( : )</option><option value="pipe">เส้นตั้ง ( | )</option><option value="slash">ทับ ( / )</option><option value="custom">กำหนดเอง…</option></select>
+      <input type="text" id="sepC" class="hide" placeholder="พิมพ์ตัวคั่น เช่น => หรือ ::" aria-label="ตัวคั่นที่กำหนดเอง" style="margin-top:6px"></div>
+    <div><label for="impMode">เมื่อโหลด</label><select id="impMode"><option value="add" selected>เพิ่มต่อจากเดิม (ข้ามโน้ตที่ซ้ำ)</option><option value="rep">แทนที่โน้ตเดิมในบทนี้</option></select></div>
+    <div><label for="impDeck">นำเข้าไปยังบท</label><select id="impDeck"></select><div id="impNewBox" class="hide" style="margin-top:6px"><input type="text" id="impDeckNew" placeholder="ชื่อบทใหม่ เช่น บทที่ 2" aria-label="ชื่อบทใหม่"><select id="impFo" aria-label="โฟลเดอร์ของบทใหม่" style="margin-top:6px"></select><input type="text" id="impFoNew" class="hide" placeholder="ชื่อโฟลเดอร์ใหม่" aria-label="ชื่อโฟลเดอร์ใหม่" style="margin-top:6px"></div></div>
+    <div><label for="impCols">จำนวนช่องต่อบรรทัด</label><select id="impCols"><option value="fit" selected>ตามจำนวนช่องที่ตั้งไว้</option><option value="auto">อัตโนมัติ (ทุกตัวคั่น)</option></select></div>
+    <div><label for="file">หรือเลือกไฟล์ .txt / .csv / .json</label><input id="file" type="file" accept=".txt,.csv,.tsv,.json,text/plain,application/json"></div>
+  </div>
+  <div class="row">
+    <button id="load" class="primary">โหลดการ์ด</button>
+    <button id="sample">ใช้ตัวอย่าง</button>
+  </div>
+  <div id="impMsg" class="msg" aria-live="polite"></div>
+  <p class="hint" id="impMap"></p>
+  <p class="hint">ใน Quizlet: เปิดชุดการ์ด → ⋯ → ส่งออก → คัดลอกข้อความ แล้ววางด้านบน ภาษาของแต่ละด้านจะตรวจจับอัตโนมัติ (ไทย / อังกฤษ / ญี่ปุ่น) หรือเลือกเองในหน้าทบทวนได้</p>
+</section>
+
+<section id="vStudy" class="hide">
+<div class="cfg" data-m="study"></div>
+  <div id="empty" class="empty">ยังไม่มีการ์ด ไปที่แท็บ “นำเข้า” ก่อน</div>
+  <div id="study" class="hide">
+    <div class="row" style="margin-top:0">
+      <div><label for="lf">ภาษาด้านหน้า</label><select id="lf"></select></div>
+      <div><label for="lb">ภาษาด้านหลัง</label><select id="lb"></select></div>
+    </div>
+    <div class="meta"><span id="pos"></span><span id="stat"></span></div>
+    <div class="bar"><i id="prog"></i></div>
+    <div class="card" id="card" tabindex="0" role="button" aria-label="พลิกการ์ด">
+      <div class="face front" id="ft"></div>
+      <div class="face back" id="bk"></div>
+    </div>
+    <div class="ctl two">
+      <button id="dont" class="dont">ยังไม่จำ</button>
+      <button id="know" class="know">จำได้</button>
+    </div>
+    <div class="ctl">
+      <button id="prev" aria-label="ก่อนหน้า">◀</button>
+      <button id="flip">พลิก</button>
+      <button id="say">🔊 ฟัง</button>
+      <button id="next" aria-label="ถัดไป">▶</button>
+    </div>
+    <div class="ctl">
+      <button id="auto">เสียงอัตโนมัติ: ปิด</button>
+      <button id="play">เล่นต่อเนื่อง</button>
+      <button id="shuf">สลับลำดับ</button>
+      <button id="only">เฉพาะที่ยังไม่จำ</button>
+    </div>
+    <div class="row">
+      <div><label for="gap">เว้นช่วงตอนเล่นต่อเนื่อง</label>
+        <select id="gap"><option value="1500">1.5 วินาที</option><option value="3000" selected>3 วินาที</option><option value="5000">5 วินาที</option></select></div>
+      <div><label for="rate">ความเร็วเสียง</label>
+        <select id="rate"><option value="0.7">ช้า</option><option value="0.9" selected>ปกติ</option><option value="1.1">เร็ว</option></select></div>
+    </div>
+    <p class="hint" id="voiceHint"></p>
+    <p class="hint">คีย์ลัด: ช่องว่าง = พลิก, ← → = เลื่อน</p>
+  </div>
+</section>
+
+<section id="vQ" class="hide">
+ <div id="qSetup">
+  <button id="qHome" class="sm hide">← เกมอื่น</button>
+  <h2 id="qTitle"></h2>
+  <div class="cfg" id="cfgQ" data-m="quiz"></div><p id="qDesc" class="hint"></p>
+  <div class="row">
+   <div><label for="qdir">ทิศทางคำถาม</label><select id="qdir"><option value="td">คำศัพท์ → ความหมาย</option><option value="dt">ความหมาย → คำศัพท์</option><option value="mix">สลับทั้งสองแบบ</option></select></div>
+   <div id="qnWrap"><label for="qn">จำนวนข้อ</label><select id="qn"><option value="10">10 ข้อ</option><option value="20">20 ข้อ</option><option value="all">ทั้งหมด</option></select></div>
+  </div>
+  <button id="qGo" class="primary">เริ่ม</button>
+  <div id="qMsg" class="msg"></div>
+ </div>
+ <div id="qPlay" class="hide">
+  <div class="meta"><span id="qStat"></span><button id="qSwap" style="min-height:32px;padding:4px 10px">⇄ สลับด้าน</button></div>
+  <div class="bar" id="qTimer"><i id="qBar"></i></div>
+  <div class="qt"><span id="qText"></span><button id="qSay" aria-label="ฟัง">🔊</button></div>
+  <div class="opts" id="opts"></div>
+  <div id="qFb" class="msg" aria-live="polite"></div>
+  <button id="qNext" class="primary hide">ข้อต่อไป</button>
+  <p class="hint">คีย์ลัด: กด 1–4 เพื่อเลือกคำตอบ</p>
+ </div>
+ <div id="qRes" class="hide"></div>
+</section>
+
+<section id="vM" class="hide">
+ <h2>โฟลเดอร์และบท</h2><p class="hint">จัดบท (deck) ไว้ในโฟลเดอร์เพื่อความเรียบร้อย เช่น โฟลเดอร์ “JLPT N5” มีบทที่ 1, 2, 3 · ทุกบทใช้ช่องและแบบการ์ดร่วมกัน</p>
+ <div id="dkList"></div>
+ <div class="row"><input type="text" id="foNew" placeholder="ชื่อโฟลเดอร์ใหม่" aria-label="ชื่อโฟลเดอร์ใหม่"><button id="foAdd">+ เพิ่มโฟลเดอร์</button></div>
+ <div class="row"><input type="text" id="dkNew" placeholder="ชื่อบทใหม่ เช่น บทที่ 2" aria-label="ชื่อบทใหม่"><select id="dkNewFo" aria-label="โฟลเดอร์ของบทใหม่"></select><button id="dkAdd">+ เพิ่มบท</button></div>
+ <h2>ช่อง (Fields)</h2><p class="hint">1 โน้ตมีได้หลายช่อง เช่น คันจิ / คำอ่าน / คำแปล แล้วกำหนดด้านล่างว่าการ์ดแต่ละแบบให้ด้านหน้า–หลังแสดงช่องไหน</p>
+ <div id="fdList"></div><div class="row"><input type="text" id="fdNew" placeholder="ชื่อช่องใหม่ เช่น คำอ่าน" aria-label="ชื่อช่องใหม่"><button id="fdAdd">+ เพิ่มช่อง</button></div>
+ <h2>แบบการ์ด (หน้า–หลัง)</h2><div id="tpList"></div>
+ <div class="row"><button id="tpAdd">+ เพิ่มแบบการ์ด</button><button id="tpJp">ตั้งค่าตัวอย่างภาษาญี่ปุ่น</button></div><div id="mgMsg" class="msg" aria-live="polite"></div>
+ <h2>โน้ต</h2>
+ <div class="meta" style="align-items:center;margin-bottom:8px"><span id="mgCount"></span><span><button id="mgUndo" class="sm hide">↩ เลิกทำ</button> <button id="mgClear" class="sm dont">ล้างทั้งหมด</button></span></div>
+ <div class="rv"><div id="nwForm"></div><button id="nwAdd" class="primary" style="margin-top:8px">+ เพิ่มโน้ต</button></div>
+ <select id="mgDk" aria-label="แสดงบท" style="margin-top:8px"></select>
+ <input type="text" id="mgQ" placeholder="ค้นหาในโน้ต" aria-label="ค้นหา" style="margin:8px 0"><div id="mgList"></div>
+ <h2>ส่งออก</h2><div class="ctl two"><button id="exCsv">CSV (ตามบทที่กรองอยู่)</button><button id="exJson">JSON (สำรองข้อมูลทั้งหมด)</button></div>
+ <p class="hint">CSV: 1 บรรทัด = 1 โน้ต ทุกช่อง · JSON: เก็บช่อง แบบการ์ด และสถานะจำได้ครบ นำกลับเข้ามาได้ในแท็บนำเข้า</p></section>
+<section id="vG" class="hide">
+ <div id="gHub"><h2>เกม</h2><div class="cfg" data-m="game"></div><p class="hint">เลือกเกมที่ชอบ ข้อที่ตอบผิดจะถูกทำเครื่องหมาย “ยังไม่จำ” ในโหมดทบทวน</p><div id="gNote" class="msg"></div>
+  <div class="hub">
+   <button class="gcard" id="gLife"><b>ท้าชิง 3 ชีวิต</b><span>เลือกตอบข้อละ 10 วินาที ตอบเร็วและถูกติดกันได้คะแนนเพิ่ม</span></button>
+   <button class="gcard" id="gM"><b>จับคู่แข่งเวลา</b><span id="gMs">แตะคำศัพท์กับความหมายให้ครบทุกคู่เร็วที่สุด</span></button>
+   <button class="gcard" id="gT"><b>พิมพ์จำ</b><span>พิมพ์คำตอบเอง ข้อที่ผิดจะวนกลับมาถามใหม่จนกว่าจะจำได้ ช่วยจำได้แม่นที่สุด</span></button>
+   <button class="gcard" id="gF"><b>จริงหรือหลอก 60 วินาที</b><span id="gFs">ตัดสินใจเร็วๆ ว่าคู่คำกับความหมายที่เห็นถูกไหม</span></button>
+  </div></div>
+ <div id="gMatch" class="hide"><button data-home class="sm">← เกมอื่น</button><h2>จับคู่แข่งเวลา</h2>
+  <div id="mSetup"><p class="hint">แตะคำศัพท์กับความหมายที่เป็นคู่กัน จับให้ครบเร็วที่สุด ผิดโดนบวกเวลา 2 วินาที</p>
+   <div class="row"><div><label for="mn">จำนวนคู่</label><select id="mn"><option value="4">4 คู่</option><option value="6" selected>6 คู่</option><option value="8">8 คู่</option></select></div></div>
+   <button id="mGo" class="primary">เริ่ม</button><div id="mMsg" class="msg"></div></div>
+  <div id="mPlay" class="hide"><div class="meta"><span id="mTime"></span><span id="mLeft"></span></div><div class="mgrid" id="mGrid"></div></div>
+  <div id="mRes" class="hide"></div></div>
+ <div id="gType" class="hide"><button data-home class="sm">← เกมอื่น</button><h2>พิมพ์จำ</h2>
+  <div id="tySetup"><p class="hint">เห็นโจทย์แล้วพิมพ์คำตอบเอง ข้อที่ผิดจะวนกลับมาถามใหม่ การดึงคำตอบออกมาจากความจำเองช่วยให้จำได้นานกว่าการเลือกตอบ</p>
+   <div class="row"><div><label for="tydir">ทิศทางโจทย์</label><select id="tydir"><option value="dt">ความหมาย → คำศัพท์</option><option value="td">คำศัพท์ → ความหมาย</option><option value="mix">สลับทั้งสองแบบ</option></select></div>
+   <div><label for="tyn">จำนวนข้อ</label><select id="tyn"><option value="10">10 ข้อ</option><option value="20">20 ข้อ</option><option value="all">ทั้งหมด</option></select></div></div>
+   <button id="tyGo" class="primary">เริ่ม</button></div>
+  <div id="tyPlay" class="hide"><div class="meta"><span id="tyStat"></span></div><div class="bar"><i id="tyBar"></i></div>
+   <div class="qt"><span id="tyAsk"></span><button id="tySay" aria-label="ฟัง">🔊</button></div>
+   <p class="hint" id="tyHint" aria-live="polite"></p>
+   <label for="tyIn">คำตอบของคุณ</label><input type="text" id="tyIn" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">
+   <div class="ctl two"><button id="tyHb">💡 ใบ้</button><button id="tyChk" class="primary">ตรวจ</button></div>
+   <div id="tyFb" class="msg" style="white-space:pre-line" aria-live="polite"></div>
+   <div id="tyAct" class="ctl two hide"><button id="tyOk" class="know">นับว่าถูก</button><button id="tyNext" class="primary">ต่อไป</button></div></div>
+  <div id="tyRes" class="hide"></div></div>
+ <div id="gTF" class="hide"><button data-home class="sm">← เกมอื่น</button><h2>จริงหรือหลอก</h2>
+  <div id="tfSetup"><p class="hint">มีเวลา 60 วินาที ตัดสินว่าคู่ที่เห็นถูกหรือไม่ ถูก +1 (ถูกติดกันได้โบนัส) ผิดโดนหัก 3 วินาที</p><button id="tfGo" class="primary">เริ่ม</button></div>
+  <div id="tfPlay" class="hide"><div class="meta"><span id="tfStat"></span><span id="tfTime"></span></div><div class="bar"><i id="tfBar"></i></div>
+   <div class="qt" id="tfQ" style="flex-direction:column;gap:6px"><div id="tfA"></div><div style="font-size:1rem;color:var(--mute)">=</div><div id="tfB"></div></div>
+   <div class="ctl two"><button id="tfNo" class="dont" style="min-height:60px">✗ หลอก</button><button id="tfYes" class="know" style="min-height:60px">✓ จริง</button></div>
+   <div id="tfFb" class="msg" aria-live="polite"></div><p class="hint">คีย์ลัด: ← = หลอก, → = จริง</p></div>
+  <div id="tfRes" class="hide"></div></div>
+</section>
+</div>
+
+<script>
+const $=s=>document.querySelector(s);
+const LANGS=[["auto","ตรวจจับอัตโนมัติ"],["th-TH","ไทย"],["en-US","English"],["ja-JP","日本語"]];
+let cards=[],order=[],idx=0,flipped=false,autoSound=false,playing=false,token=0,onlyUnknown=false,voices=[];
+
+let M={fields:["หน้า","หลัง"],tpls:[{n:"หน้า → หลัง",f:[0],b:[1]}],notes:[],decks:[{id:"d1",name:"บทที่ 1",fo:""}],folders:[]};
+function store(k,v){try{if(k==="fc.cards"){v.forEach(c=>{if(c._n){if(c._key!==undefined)(c._n.kx=c._n.kx||{})[c._key]=c.k?1:0;else c._n.k[c._ti]=c.k?1:0}});k="fc.anki";v=M}localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+function recall(k){try{return JSON.parse(localStorage.getItem(k))}catch(e){return null}}
+
+function detect(t){
+  if(/[\u0E00-\u0E7F]/.test(t))return"th-TH";
+  if(/[\u3040-\u30FF\u4E00-\u9FFF]/.test(t))return"ja-JP";
+  return"en-US";
+}
+function splitLine(line,sep){
+  let q=false;
+  for(let i=0;i<line.length;i++){
+    const c=line[i];
+    if(c=='"')q=!q;
+    else if(!q&&line.startsWith(sep,i))return[line.slice(0,i),line.slice(i+sep.length)];
+  }
+  return null;
+}
+function clean(s){s=s.trim();if(s.length>1&&s[0]=='"'&&s.endsWith('"'))s=s.slice(1,-1).replace(/""/g,'"');return s}
+function splitN(line,sep,n){const out=[];let q=false,st=0;for(let i=0;i<line.length&&out.length<n-1;i++){const c=line[i];if(c=='"')q=!q;else if(!q&&line.startsWith(sep,i)){out.push(line.slice(st,i));st=i+sep.length;i+=sep.length-1}}out.push(line.slice(st));return out.map(clean)}
+function parseRows(text,sepKey){
+  const sep=sepKey==="custom"?$("#sepC").value:{tab:"\t",comma:",",dash:" - ",semi:";",eq:"=",colon:":",pipe:"|",slash:"/"}[sepKey];
+  if(!sep)return[];const n=$("#impCols").value==="auto"?1e9:Math.max(2,M.fields.length),rows=[];
+  text.split(/\r?\n/).forEach(l=>{if(!l.trim())return;let p=splitN(l,sep,n);if(p.length<2&&sepKey==="tab")p=splitN(l,"  ",n);if(p.filter(Boolean).length>=2)rows.push(p)});
+  return rows;
+}
+$("#sep").onchange=()=>{$("#sepC").classList.toggle("hide",$("#sep").value!=="custom");if($("#sep").value==="custom")$("#sepC").focus()};
+function addRows(rows,rep,dk){
+  dk=dk||M.decks[0].id;const w=Math.max(...rows.map(r=>r.length));
+  while(M.fields.length<w){M.fields.push("ช่อง "+(M.fields.length+1));M.notes.forEach(n=>n.f.push(""))}
+  if(rep)M.notes=M.notes.filter(n=>n.dk!==dk);
+  const have=new Set(M.notes.filter(n=>n.dk===dk).map(n=>n.f.join("\t")));let add=0;
+  rows.forEach(r=>{const f=M.fields.map((_,i)=>r[i]||""),key=f.join("\t");if(have.has(key))return;have.add(key);M.notes.push({f,k:[],dk});add++});
+  refresh();const d=M.decks.find(x=>x.id===dk);
+  return (rep?"แทนที่แล้ว ":"เพิ่ม ")+add+" โน้ตในบท “"+d.name+"” (รวมทั้งหมด "+M.notes.length+" โน้ต "+cards.length+" การ์ด)";
+}
+function resolveDeck(){
+  const v=$("#impDeck").value;if(v!=="__new")return v;
+  let fo=$("#impFo").value;
+  if(fo==="__new"){const f={id:uid(),name:$("#impFoNew").value.trim()||"โฟลเดอร์ "+(M.folders.length+1)};M.folders.push(f);fo=f.id;$("#impFoNew").value=""}
+  const d={id:uid(),name:$("#impDeckNew").value.trim()||"บทที่ "+(M.decks.length+1),fo};M.decks.push(d);$("#impDeckNew").value="";return d.id;
+}
+function afterImport(dk){$("#impDeck").value=dk;const d=M.decks.find(x=>x.id===dk);$("#impFo").value=d&&d.fo||"";impToggle()}
+function visible(){return order.filter(i=>!onlyUnknown||!cards[i].k)}
+
+function render(){
+  const has=cards.length>0;
+  $("#empty").classList.toggle("hide",has);$("#study").classList.toggle("hide",!has);
+  if(!has)return;
+  const v=visible();
+  if(!v.length){$("#ft").textContent="ครบทุกใบแล้ว 🎉";$("#bk").textContent="กด “เฉพาะที่ยังไม่จำ” เพื่อกลับไปดูทั้งหมด";$("#pos").textContent="0 / 0";return}
+  if(idx>=v.length)idx=0;
+  const c=cards[v[idx]];
+  $("#ft").textContent=c.t;$("#bk").textContent=c.d;
+  $("#card").classList.toggle("flip",flipped);
+  $("#pos").textContent=(idx+1)+" / "+v.length;
+  const k=cards.filter(x=>x.k).length;
+  $("#stat").textContent="จำได้ "+k+" / "+cards.length;
+  $("#prog").style.width=((idx+1)/v.length*100)+"%";
+  $("#only").classList.toggle("on",onlyUnknown);
+  $("#auto").textContent="เสียงอัตโนมัติ: "+(autoSound?"เปิด":"ปิด");
+  $("#auto").classList.toggle("on",autoSound);
+  $("#play").textContent=playing?"หยุดเล่น":"เล่นต่อเนื่อง";
+  $("#play").classList.toggle("on",playing);
+}
+function cur(){const v=visible();return v.length?cards[v[idx]]:null}
+function langFor(side,text){const s=$(side==="f"?"#lf":"#lb").value;return s==="auto"?detect(text):s}
+
+function pickVoice(lang){const pre=lang.slice(0,2);return voices.find(v=>v.lang.replace("_","-")===lang)||voices.find(v=>v.lang.toLowerCase().startsWith(pre))}
+function speak(text,lang){
+  return new Promise(res=>{
+    if(!("speechSynthesis" in window))return res();
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text);
+    u.lang=lang;const v=pickVoice(lang);if(v)u.voice=v;
+    u.rate=parseFloat($("#rate").value);
+    const t=setTimeout(res,10000);
+    u.onend=u.onerror=()=>{clearTimeout(t);res()};
+    speechSynthesis.speak(u);
+  });
+}
+function speakSide(){
+  const c=cur();if(!c)return Promise.resolve();
+  return flipped?speak(c.d,langFor("b",c.d)):speak(c.t,langFor("f",c.t));
+}
+function show(i){
+  const v=visible();if(!v.length)return;
+  idx=(i+v.length)%v.length;flipped=false;render();
+  if(autoSound&&!playing)speakSide();
+}
+function doFlip(){flipped=!flipped;render();if(autoSound&&!playing)speakSide()}
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+
+async function loop(){
+  const my=++token;playing=true;render();
+  const gap=()=>parseInt($("#gap").value);
+  while(playing&&my===token){
+    if(autoSound)await speakSide();
+    if(my!==token)break;await sleep(gap());if(my!==token)break;
+    flipped=true;render();
+    if(autoSound)await speakSide();
+    if(my!==token)break;await sleep(gap());if(my!==token)break;
+    const v=visible();idx=(idx+1)%Math.max(v.length,1);flipped=false;render();
+  }
+}
+function stop(){playing=false;token++;try{speechSynthesis.cancel()}catch(e){}render()}
+
+function tab(w){
+  useCfg(w);
+  const q=['quiz','test'].includes(w);$('#vG').classList.toggle('hide',w!=='game');$('#vM').classList.toggle('hide',w!=='mng');
+  $('#vImp').classList.toggle('hide',w!=='imp');$('#vStudy').classList.toggle('hide',w!=='study');$('#vQ').classList.toggle('hide',!q);
+  [['imp','#tImp'],['study','#tStudy'],['quiz','#tQuiz'],['test','#tTest'],['game','#tGame'],['mng','#tMng']].forEach(([k,s])=>$(s).classList.toggle('on',k===w));
+  if(w!=='study')stop();
+  clearInterval(gt);clearTimeout(adv);stopGames();
+  if(q){mode=w;qSetupShow()}else if(w==='study')render();else if(w==='game')gHome();else if(w==='mng')mgAll();
+}
+
+// setup
+["#lf","#lb"].forEach(s=>{$(s).innerHTML=LANGS.map(l=>`<option value="${l[0]}">${l[1]}</option>`).join("");$(s).onchange=()=>{store("fc.lang",[$("#lf").value,$("#lb").value])}});
+const sl=recall("fc.lang");if(sl){$("#lf").value=sl[0];$("#lb").value=sl[1]}
+function loadVoices(){
+  if(!("speechSynthesis" in window)){$("#voiceHint").textContent="เบราว์เซอร์นี้ไม่รองรับเสียงอ่าน";return}
+  voices=speechSynthesis.getVoices();
+  const miss=["th","en","ja"].filter(p=>!voices.some(v=>v.lang.toLowerCase().startsWith(p)));
+  $("#voiceHint").textContent=voices.length&&miss.length?"อุปกรณ์นี้ยังไม่มีเสียงสำหรับ: "+miss.map(m=>({th:"ไทย",en:"อังกฤษ",ja:"ญี่ปุ่น"})[m]).join(", ")+" (ติดตั้งได้ในการตั้งค่าเสียงของระบบ)":"";
+}
+if("speechSynthesis" in window){speechSynthesis.onvoiceschanged=loadVoices;loadVoices()}
+
+$("#tImp").onclick=()=>tab("imp");$("#tStudy").onclick=()=>tab("study");$("#tQuiz").onclick=()=>tab("quiz");$("#tTest").onclick=()=>tab("test");$("#tGame").onclick=()=>tab("game");$("#tMng").onclick=()=>tab("mng");
+$("#load").onclick=()=>{
+  const rows=parseRows($("#txt").value,$("#sep").value);
+  if(!rows.length){$("#impMsg").textContent="ไม่พบโน้ต ลองเปลี่ยนตัวคั่นให้ตรงกับข้อความ";return}
+  const dk=resolveDeck(),msg=addRows(rows,$("#impMode").value==="rep",dk);afterImport(dk);$("#txt").value="";$("#impMsg").textContent=msg;tab("study");
+};
+$("#sample").onclick=()=>{
+  $("#txt").value="apple\tแอปเปิล\n猫\tแมว (neko)\nありがとう\tขอบคุณ\nthank you\tありがとう\nขอบคุณ\tthank you\n水\tน้ำ (mizu)";
+  $("#sep").value="tab";
+};
+$("#file").onchange=e=>{
+  const f=e.target.files[0];if(!f)return;
+  if(/\.json$/i.test(f.name)){f.text().then(t=>{try{importJson(JSON.parse(t),f.name.replace(/\.json$/i,""))}catch(e){$("#impMsg").textContent="อ่านไฟล์ JSON ไม่ได้"}});e.target.value="";return}
+  if(/\.csv$/i.test(f.name))$("#sep").value="comma";
+  f.text().then(t=>{$("#txt").value=t;if($("#impDeck").value==="__new"&&!$("#impDeckNew").value)$("#impDeckNew").value=f.name.replace(/\.[^.]+$/,"");$("#impMsg").textContent="อ่านไฟล์แล้ว กด “โหลดการ์ด”"});
+};
+$("#card").onclick=doFlip;$("#flip").onclick=doFlip;
+$("#next").onclick=()=>{if(playing)stop();show(idx+1)};
+$("#prev").onclick=()=>{if(playing)stop();show(idx-1)};
+$("#say").onclick=()=>speakSide();
+$("#auto").onclick=()=>{autoSound=!autoSound;store("fc.auto",autoSound);if(!autoSound)try{speechSynthesis.cancel()}catch(e){}render();if(autoSound&&!playing)speakSide()};
+$("#play").onclick=()=>playing?stop():loop();
+$("#shuf").onclick=()=>{for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]]}idx=0;flipped=false;render()};
+$("#only").onclick=()=>{onlyUnknown=!onlyUnknown;idx=0;flipped=false;render()};
+function mark(k){const v=visible();if(!v.length)return;cards[v[idx]].k=k;store("fc.cards",cards);const wasOnly=onlyUnknown;if(wasOnly&&k){flipped=false;render()}else show(idx+1)}
+$("#know").onclick=()=>mark(1);$("#dont").onclick=()=>mark(0);
+document.addEventListener("keydown",e=>{
+  if($("#vStudy").classList.contains("hide")||/TEXTAREA|SELECT|INPUT/.test(e.target.tagName))return;
+  if(e.key===" "){e.preventDefault();doFlip()}
+  else if(e.key==="ArrowRight")$("#next").click();
+  else if(e.key==="ArrowLeft")$("#prev").click();
+});
+
+// ---- quiz / test / game ----
+let mode="quiz",Q=[],qi=0,score=0,streak=0,lives=3,answers=[],locked=false,gt=null,adv=null,tLeft=0,best=recall("fc.best")||0;
+const TIME=10;
+function shuffle(a){a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+function mkQ(c){
+  let d=$("#qdir").value;if(d==="mix")d=Math.random()<.5?"td":"dt";
+  const ask=d==="td"?c.t:c.d,ans=d==="td"?c.d:c.t;
+  const pool=[...new Set(cards.filter(x=>x!==c).map(x=>d==="td"?x.d:x.t).filter(x=>x!==ans))];
+  return{id:c,ask,ans,opts:shuffle([ans,...shuffle(pool).slice(0,3)]),askLang:langFor(d==="td"?"f":"b",ask),ansLang:langFor(d==="td"?"b":"f",ans)};
+}
+function qSetupShow(){
+  $("#cfgQ").dataset.m=mode;cfgRender($("#cfgQ"));
+  $("#qSetup").classList.remove("hide");$("#qPlay").classList.add("hide");$("#qRes").classList.add("hide");
+  const d={quiz:["เลือกตอบ","เลือก 1 ใน 4 ตัวเลือก ดูเฉลยทันทีหลังตอบแต่ละข้อ"],test:["ทดสอบ","ไม่เฉลยระหว่างทำ ดูคะแนนและข้อที่ผิดตอนจบ"],game:["เกม","3 ชีวิต ข้อละ 10 วินาที ตอบเร็วและถูกติดกันจะได้คะแนนเพิ่ม"]}[mode];
+  $("#qTitle").textContent=d[0];$("#qDesc").textContent=d[1]+(mode==="game"&&best?" (สถิติสูงสุด "+best+")":"");
+  $("#qnWrap").classList.toggle("hide",mode!=="test");$("#qHome").classList.toggle("hide",mode!=="game");
+  $("#qMsg").textContent=cards.length<2?"ต้องมีการ์ดอย่างน้อย 2 ใบ ไปที่แท็บ “นำเข้า” ก่อน":cards.length<4?"การ์ดน้อยกว่า 4 ใบ จะมีตัวเลือกน้อยลง":"";
+}
+function qStart(){
+  if(cards.length<2)return;
+  let deck=shuffle(cards);
+  if(mode==="test"&&$("#qn").value!=="all")deck=deck.slice(0,+$("#qn").value);
+  Q=deck.map(mkQ);qi=0;score=0;streak=0;lives=3;answers=[];
+  $("#qSetup").classList.add("hide");$("#qRes").classList.add("hide");$("#qPlay").classList.remove("hide");
+  $("#qTimer").classList.toggle("hide",mode!=="game");
+  qShow();
+}
+function qStat(){
+  const n=Q.length,i=Math.min(qi+1,n);
+  $("#qStat").textContent=mode==="game"?"คะแนน "+score+" | ชีวิต "+("❤️".repeat(Math.max(lives,0))||"0")+" | คอมโบ "+streak+" | ข้อ "+i+"/"+n:"ข้อ "+i+"/"+n+(mode==="quiz"?" | ถูก "+score:"");
+}
+function qTick(){$("#qBar").style.width=Math.max(tLeft,0)/TIME*100+"%"}
+function qShow(){
+  clearInterval(gt);clearTimeout(adv);locked=false;
+  if(qi>=Q.length)return qEnd();
+  const q=Q[qi],box=$("#opts");
+  $("#qText").textContent=q.ask;box.innerHTML="";
+  q.opts.forEach((o,i)=>{const b=document.createElement("button");b.className="opt";b.textContent=(i+1)+". "+o;b.onclick=()=>qPick(i);box.appendChild(b)});
+  $("#qFb").textContent="";$("#qNext").classList.add("hide");qStat();
+  if(autoSound)speak(q.ask,q.askLang);
+  if(mode==="game"){tLeft=TIME;qTick();gt=setInterval(()=>{tLeft-=0.1;qTick();if(tLeft<=0){clearInterval(gt);qPick(-1)}},100)}
+}
+function later(ms){clearTimeout(adv);adv=setTimeout(qAdv,ms)}
+function qAdv(){clearTimeout(adv);if(mode==="game"&&lives<=0)return qEnd();qi++;qShow()}
+function qPick(i){
+  if(locked)return;locked=true;clearInterval(gt);
+  const q=Q[qi],ok=i>=0&&q.opts[i]===q.ans;
+  answers.push({q,pick:i<0?null:q.opts[i],ok});
+  q.id.k=ok?1:0;
+  if(ok){score+=mode==="game"?10+Math.min(streak,5)*2+Math.ceil(tLeft):1;streak++}
+  else{streak=0;if(mode==="game")lives--}
+  const bs=[...$("#opts").children];
+  if(mode==="test"){bs.forEach((b,j)=>b.classList.toggle("sel",j===i));later(350);return}
+  bs.forEach((b,j)=>{if(q.opts[j]===q.ans)b.classList.add("right");else if(j===i)b.classList.add("wrong")});
+  $("#qFb").textContent=ok?"ถูกต้อง ✓":(i<0?"หมดเวลา — ":"ยังไม่ถูก — ")+"คำตอบคือ "+q.ans;
+  qStat();
+  if(q.expl)$('#qFb').textContent+='\n'+q.expl;
+  if(autoSound)speak(q.ans,q.ansLang);
+  if(mode==="game")later(ok?700:1600);
+  else if(ok)later(900);
+  else $("#qNext").classList.remove("hide");
+}
+function qEnd(){
+  clearInterval(gt);clearTimeout(adv);store("fc.cards",cards);
+  $("#qPlay").classList.add("hide");$("#qRes").classList.remove("hide");
+  const n=answers.length,right=answers.filter(a=>a.ok).length;let h="";
+  if(mode==="game"){const nb=score>best;if(nb){best=score;store("fc.best",best)}
+    h="<h2>"+(lives<=0?"เกมจบ":"ผ่านครบทุกข้อ")+"</h2><p>คะแนน <b>"+score+"</b> (สูงสุด "+best+(nb?" สถิติใหม่ 🎉":"")+")</p><p>ตอบถูก "+right+" / "+n+" ข้อ</p>"}
+  else h="<h2>"+(mode==="test"?"ผลการทดสอบ":"ครบทุกข้อแล้ว")+"</h2><p>ตอบถูก <b>"+right+" / "+n+"</b> ("+Math.round(right/Math.max(n,1)*100)+"%)</p>";
+  const w=answers.filter(a=>!a.ok);
+  if(w.length)h+="<h2>ข้อที่ผิด</h2>"+w.map(a=>'<div class="rv"><b>'+esc(a.q.ask)+'</b><br>คำตอบ: '+esc(a.q.ans)+'<br><span class="dont">'+(a.pick===null?"ไม่ได้ตอบ":"คุณตอบ: "+esc(a.pick))+"</span></div>").join("");
+  h+='<p class="hint">ข้อที่ผิดจะถูกทำเครื่องหมาย “ยังไม่จำ” ในโหมดทบทวน</p><div class="row"><button id="again" class="primary">เล่นอีกครั้ง</button><button id="back">ตั้งค่า</button>'+(mode==='game'?'<button id="toHub">เกมอื่น</button>':'')+'</div>';
+  $("#qRes").innerHTML=h;$("#again").onclick=qStart;$("#back").onclick=qSetupShow;if($("#toHub"))$("#toHub").onclick=gHome;
+}
+$("#qGo").onclick=qStart;
+$('#qSwap').onclick=()=>{
+  const d=$('#qdir');d.value=d.value==='td'?'dt':'td';
+  for(let i=qi+((locked||mode==='game')?1:0);i<Q.length;i++)Q[i]=mkQ(Q[i].id);
+  if(!locked&&mode!=='game')qShow();
+};
+$("#qNext").onclick=qAdv;
+$("#qSay").onclick=()=>{const q=Q[qi];if(q)speak(q.ask,q.askLang)};
+document.addEventListener("keydown",e=>{
+  if($("#vQ").classList.contains("hide")||$("#qPlay").classList.contains("hide")||/TEXTAREA|SELECT|INPUT/.test(e.target.tagName))return;
+  if(/^[1-4]$/.test(e.key)){const b=$("#opts").children[+e.key-1];if(b)b.click()}
+  else if((e.key==="Enter"||e.key===" ")&&!$("#qNext").classList.contains("hide")){e.preventDefault();qAdv()}
+});
+
+
+// ---- game hub ----
+const GP=['#gMatch','#gType','#gTF'];let mT=null,tfT=null,tyAdv=null;
+function stopGames(){clearInterval(mT);clearInterval(tfT);clearTimeout(tyAdv)}
+function gOpen(p){stopGames();$('#gHub').classList.add('hide');GP.forEach(x=>$(x).classList.toggle('hide',x!==p))}
+function gHome(){
+  stopGames();$('#vQ').classList.add('hide');$('#vG').classList.remove('hide');$('#gHub').classList.remove('hide');GP.forEach(x=>$(x).classList.add('hide'));
+  const no=cards.length<2;['#gLife','#gM','#gT','#gF'].forEach(x=>$(x).disabled=no);
+  $('#gNote').textContent=no?'ต้องมีการ์ดอย่างน้อย 2 ใบ ไปที่แท็บ “นำเข้า” ก่อน':'';
+  $('#gMs').textContent='แตะคำศัพท์กับความหมายให้ครบทุกคู่เร็วที่สุด'+(mBest[6]?' (6 คู่ ดีที่สุด '+mBest[6].toFixed(1)+' วิ)':'');
+  $('#gFs').textContent='ตัดสินใจเร็วๆ ว่าคู่คำกับความหมายที่เห็นถูกไหม'+(tfBest?' (สถิติ '+tfBest+')':'');
+}
+document.querySelectorAll('[data-home]').forEach(b=>b.onclick=gHome);$('#qHome').onclick=gHome;
+$('#gLife').onclick=()=>{$('#vG').classList.add('hide');$('#vQ').classList.remove('hide');mode='game';qSetupShow()};
+const miss=(m,c)=>m.set(c,(m.get(c)||0)+1);
+const missList=m=>m.size?'<h2>คำที่ควรทบทวน</h2>'+[...m.keys()].map(c=>'<div class="rv"><b>'+esc(c.t)+'</b> = '+esc(c.d)+'</div>').join(''):'';
+const endBtns=(id)=>'<div class="row"><button id="'+id+'" class="primary">เล่นอีกครั้ง</button><button data-home>เกมอื่น</button></div>';
+function endRes(box,html,again){const r=$(box);r.innerHTML=html;r.classList.remove('hide');r.querySelector('[data-home]').onclick=gHome;r.querySelector('.primary').onclick=again;store('fc.cards',cards)}
+
+// ---- match ----
+let mTiles=[],mSel=null,mPairs=0,mDone=0,mStart=0,mPen=0,mLock=false,mMiss=new Map(),mBest=recall('fc.mbest')||{};
+const mEl=()=>(Date.now()-mStart)/1000+mPen;
+function mBegin(){
+  const n=+$('#mn').value,used=new Set(),deck=[];
+  for(const c of shuffle(cards)){if(c.t===c.d||used.has(c.t)||used.has(c.d))continue;used.add(c.t);used.add(c.d);deck.push(c);if(deck.length>=n)break}
+  if(deck.length<2){$('#mMsg').textContent='มีการ์ดที่ใช้ได้น้อยเกินไป (คำที่ซ้ำกันจะไม่ถูกนำมาใช้)';return}
+  mPairs=deck.length;mDone=0;mSel=null;mPen=0;mLock=false;mMiss=new Map();
+  mTiles=shuffle(deck.flatMap(c=>[{c,x:c.t},{c,x:c.d}]));
+  const g=$('#mGrid');g.innerHTML='';
+  mTiles.forEach((t,i)=>{const b=document.createElement('button');b.className='tile';b.textContent=t.x;b.onclick=()=>mPick(i,b);g.appendChild(b)});
+  $('#mSetup').classList.add('hide');$('#mRes').classList.add('hide');$('#mPlay').classList.remove('hide');
+  mStart=Date.now();clearInterval(mT);mT=setInterval(mTick,100);mTick();
+}
+function mTick(){$('#mTime').textContent='⏱ '+mEl().toFixed(1)+' วิ';$('#mLeft').textContent='เหลือ '+(mPairs-mDone)+' คู่'}
+function mPick(i,b){
+  if(mLock)return;const t=mTiles[i];if(autoSound)speak(t.x,detect(t.x));
+  if(!mSel){mSel={i,b};b.classList.add('sel');return}
+  if(mSel.i===i){b.classList.remove('sel');mSel=null;return}
+  const a=mSel;mSel=null,ok=mTiles[a.i].c===t.c;
+  [a.b,b].forEach(x=>{x.classList.remove('sel');x.classList.add(ok?'good':'bad')});
+  if(ok){setTimeout(()=>[a.b,b].forEach(x=>{x.classList.add('done');x.disabled=true}),350);mDone++;mTick();if(mDone===mPairs)mEnd()}
+  else{mLock=true;mPen+=2;miss(mMiss,t.c);miss(mMiss,mTiles[a.i].c);setTimeout(()=>{[a.b,b].forEach(x=>x.classList.remove('bad'));mLock=false},450)}
+}
+function mEnd(){
+  clearInterval(mT);const t=mEl(),nb=!mBest[mPairs]||t<mBest[mPairs];if(nb){mBest[mPairs]=t;store('fc.mbest',mBest)}
+  mMiss.forEach((n,c)=>c.k=0);
+  setTimeout(()=>{$('#mPlay').classList.add('hide');endRes('#mRes','<h2>จับคู่ครบแล้ว 🎉</h2><p>เวลา <b>'+t.toFixed(1)+'</b> วินาที (ดีที่สุด '+mBest[mPairs].toFixed(1)+(nb?' สถิติใหม่':'')+')</p><p>จับผิด '+[...mMiss.values()].reduce((a,b)=>a+b,0)/2+' ครั้ง</p>'+missList(mMiss)+endBtns('mAgain'),mBegin)},500);
+}
+$('#gM').onclick=()=>{$('#mSetup').classList.remove('hide');$('#mPlay').classList.add('hide');$('#mRes').classList.add('hide');$('#mMsg').textContent='';gOpen('#gMatch')};
+$('#mGo').onclick=mBegin;
+
+// ---- type ----
+let tyQ=[],tyCur=null,tyDone=0,tyTotal=0,tyFirst=0,tyLocked=false,tyTried=new Set(),tyReq=null,tyMiss=new Map();
+const norm=s=>s.normalize('NFKC').toLowerCase().replace(/[\s\u200b.,!?;:'"“”‘’、。・\-_\/\\]+/g,'');
+const base=a=>a.replace(/[（(][^）)]*[）)]/g,'').trim();
+function isRight(inp,ans){
+  const v=new Set([ans,base(ans)]);(ans.match(/[（(][^）)]*[）)]/g)||[]).forEach(m=>v.add(m.slice(1,-1)));
+  [...v].forEach(x=>x.split(/[\/,;、，；]|\s-\s/).forEach(p=>v.add(p)));
+  const n=norm(inp);return !!n&&[...v].map(norm).includes(n);
+}
+function tyMk(c){let d=$('#tydir').value;if(d==='mix')d=Math.random()<.5?'td':'dt';const f=d==='td';
+  return{c,ask:f?c.t:c.d,ans:f?c.d:c.t,aL:langFor(f?'f':'b',f?c.t:c.d),h:0}}
+function tyBegin(){
+  let deck=shuffle(cards);if($('#tyn').value!=='all')deck=deck.slice(0,+$('#tyn').value);
+  tyQ=deck.map(tyMk);tyTotal=tyQ.length;tyDone=0;tyFirst=0;tyTried=new Set();tyMiss=new Map();
+  $('#tySetup').classList.add('hide');$('#tyRes').classList.add('hide');$('#tyPlay').classList.remove('hide');tyNextQ();
+}
+function tyNextQ(){
+  clearTimeout(tyAdv);if(!tyQ.length)return tyEnd();
+  tyCur=tyQ.shift();tyLocked=false;tyReq=null;
+  $('#tyAsk').textContent=tyCur.ask;$('#tyIn').value='';$('#tyHint').textContent='';$('#tyFb').textContent='';$('#tyAct').classList.add('hide');$('#tyHb').disabled=false;
+  $('#tyStat').textContent='เหลือ '+(tyQ.length+1)+' ข้อ | ถูกตั้งแต่ครั้งแรก '+tyFirst;$('#tyBar').style.width=tyDone/tyTotal*100+'%';
+  $('#tyIn').focus();if(autoSound)speak(tyCur.ask,tyCur.aL);
+}
+function tyHint(){
+  if(tyLocked)return;const ch=Array.from(base(tyCur.ans));tyCur.h++;
+  $('#tyHint').textContent='ใบ้: '+ch.map((x,i)=>x===' '?' ':i<tyCur.h?x:'＿').join('');
+  if(tyCur.h>=ch.length)$('#tyHb').disabled=true;
+}
+function tyCheck(){
+  if(tyLocked)return;const v=$('#tyIn').value.trim();if(!v){$('#tyFb').textContent='พิมพ์คำตอบก่อน';return}
+  const c=tyCur.c,first=!tyTried.has(c);tyLocked=true;tyTried.add(c);
+  if(isRight(v,tyCur.ans)){
+    tyDone++;if(first&&!tyCur.h){tyFirst++;c.k=1}else c.k=0;
+    $('#tyFb').textContent='✓ ถูกต้อง: '+tyCur.ans;if(autoSound)speak(tyCur.ans,langFor(tyCur.aL===langFor('f',c.t)?'f':'b',tyCur.ans));
+    store('fc.cards',cards);tyAdv=setTimeout(tyNextQ,900);
+  }else{
+    c.k=0;miss(tyMiss,c);const r=Object.assign({},tyCur,{h:0});tyQ.splice(Math.min(3,tyQ.length),0,r);tyReq={r,first};
+    $('#tyFb').textContent='✗ คำตอบคือ: '+tyCur.ans+'\nคุณพิมพ์: '+v+'\n(จะถามซ้ำอีกครั้ง)';$('#tyAct').classList.remove('hide');
+    if(autoSound)speak(tyCur.ans,langFor(tyCur.aL===langFor('f',c.t)?'f':'b',tyCur.ans));
+  }
+}
+function tyOverride(){
+  if(!tyReq)return;const i=tyQ.indexOf(tyReq.r);if(i>=0)tyQ.splice(i,1);tyMiss.delete(tyCur.c);
+  tyDone++;if(tyReq.first&&!tyCur.h){tyFirst++;tyCur.c.k=1}store('fc.cards',cards);tyNextQ();
+}
+function tyEnd(){
+  $('#tyPlay').classList.add('hide');
+  endRes('#tyRes','<h2>ครบทุกข้อแล้ว 🎉</h2><p>ถูกตั้งแต่ครั้งแรกโดยไม่ใช้ใบ้ <b>'+tyFirst+' / '+tyTotal+'</b></p>'+missList(tyMiss)+endBtns('tyAgain'),tyBegin);
+}
+$('#gT').onclick=()=>{$('#tySetup').classList.remove('hide');$('#tyPlay').classList.add('hide');$('#tyRes').classList.add('hide');gOpen('#gType')};
+$('#tyGo').onclick=tyBegin;$('#tyChk').onclick=tyCheck;$('#tyHb').onclick=tyHint;$('#tyOk').onclick=tyOverride;$('#tyNext').onclick=tyNextQ;
+$('#tySay').onclick=()=>{if(tyCur)speak(tyCur.ask,tyCur.aL)};
+$('#tyIn').addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();if(tyLocked)tyNextQ();else tyCheck()}});
+
+// ---- true / false ----
+const TFT=60;let tfLeft=0,tfScore=0,tfN=0,tfRight=0,tfStreak=0,tfLock=false,tfCur=null,tfLast=null,tfMiss=new Map(),tfBest=recall('fc.tfbest')||0;
+function tfMake(){
+  let c;do{c=cards[Math.floor(Math.random()*cards.length)]}while(c===tfLast&&cards.length>1);tfLast=c;
+  let truth=Math.random()<.5,o=c;const pool=cards.filter(x=>x.d!==c.d&&x.t!==c.t);
+  if(!truth&&!pool.length)truth=true;if(!truth)o=pool[Math.floor(Math.random()*pool.length)];
+  const f=Math.random()<.5;tfCur={c,truth,a:f?c.d:c.t,b:f?o.t:o.d};
+  $('#tfA').textContent=tfCur.a;$('#tfB').textContent=tfCur.b;$('#tfQ').className='qt';$('#tfQ').style.cssText='flex-direction:column;gap:6px';
+}
+function tfTick(){
+  $('#tfTime').textContent='⏱ '+Math.max(tfLeft,0).toFixed(0)+' วิ';$('#tfBar').style.width=Math.max(tfLeft,0)/TFT*100+'%';
+  $('#tfStat').textContent='คะแนน '+tfScore+' | คอมโบ '+tfStreak;if(tfLeft<=0)tfEnd();
+}
+function tfBegin(){
+  tfLeft=TFT;tfScore=tfN=tfRight=tfStreak=0;tfLock=false;tfMiss=new Map();tfLast=null;
+  $('#tfSetup').classList.add('hide');$('#tfRes').classList.add('hide');$('#tfPlay').classList.remove('hide');$('#tfFb').textContent='';
+  tfMake();tfTick();clearInterval(tfT);tfT=setInterval(()=>{tfLeft-=.1;tfTick()},100);
+}
+function tfPick(ans){
+  if(tfLock||tfLeft<=0)return;tfLock=true;const ok=ans===tfCur.truth;tfN++;
+  $('#tfQ').classList.add(ok?'ok':'no');
+  if(ok){tfRight++;tfStreak++;tfScore+=1+Math.floor(tfStreak/5);$('#tfFb').textContent=''}
+  else{tfStreak=0;tfLeft-=3;tfCur.c.k=0;miss(tfMiss,tfCur.c);$('#tfFb').textContent='✗ ที่ถูกคือ '+tfCur.c.t+' = '+tfCur.c.d+' (−3 วินาที)'}
+  tfTick();setTimeout(()=>{if(tfLeft>0){tfLock=false;tfMake()}},ok?250:1000);
+}
+function tfEnd(){
+  clearInterval(tfT);if(!$('#tfRes').classList.contains('hide'))return;tfLock=true;
+  const nb=tfScore>tfBest;if(nb){tfBest=tfScore;store('fc.tfbest',tfBest)}
+  $('#tfPlay').classList.add('hide');
+  endRes('#tfRes','<h2>หมดเวลา</h2><p>คะแนน <b>'+tfScore+'</b> (สูงสุด '+tfBest+(nb?' สถิติใหม่ 🎉':'')+')</p><p>ตอบถูก '+tfRight+' / '+tfN+' ข้อ</p>'+missList(tfMiss)+endBtns('tfAgain'),tfBegin);
+}
+$('#gF').onclick=()=>{$('#tfSetup').classList.remove('hide');$('#tfPlay').classList.add('hide');$('#tfRes').classList.add('hide');gOpen('#gTF')};
+$('#tfGo').onclick=tfBegin;$('#tfYes').onclick=()=>tfPick(true);$('#tfNo').onclick=()=>tfPick(false);
+document.addEventListener('keydown',e=>{
+  if($('#tfPlay').classList.contains('hide')||$('#gTF').classList.contains('hide'))return;
+  if(e.key==='ArrowRight')tfPick(true);else if(e.key==='ArrowLeft')tfPick(false);
+});
+
+
+// ---- anki-style notes / fields / card templates ----
+const mk=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e};
+const mgMsg=t=>$("#mgMsg").textContent=t;
+const joinF=(n,a)=>a.map(i=>(n.f[i]||"").trim()).filter(Boolean).join(" / ");
+let mgEdit=-1,mgSnap=null,nwDk=null;
+const uid=()=>"d"+Date.now().toString(36)+Math.random().toString(36).slice(2,4);
+let cfg=recall("fc.cfg")||{},curKey="study",curSig="";
+const validDk=a=>{const v=(a||[]).filter(id=>M.decks.some(d=>d.id===id));return v.length?v:M.decks.map(d=>d.id)};
+const cfgOf=m=>cfg[m]||{src:"all"},validF=a=>(a||[]).filter(i=>i<M.fields.length);
+function rebuild(){
+  const c=cfgOf(curKey),out=[],dks=c.dk?validDk(c.dk):null;
+  M.notes.forEach(n=>{
+    if(dks&&!dks.includes(n.dk))return;
+    if(c.src==="custom"){const f=validF(c.f),b=validF(c.b),t=joinF(n,f),d=joinF(n,b),key=f.join(",")+"|"+b.join(",");if(t&&d)out.push({t,d,k:n.kx&&n.kx[key]?1:0,_n:n,_key:key})}
+    else M.tpls.forEach((tp,ti)=>{if(typeof c.src==="number"&&c.src<M.tpls.length&&c.src!==ti)return;const t=joinF(n,tp.f),d=joinF(n,tp.b);if(t&&d)out.push({t,d,k:n.k[ti]?1:0,_n:n,_ti:ti})})
+  });
+  cards=out;order=cards.map((_,i)=>i);idx=0;flipped=false;onlyUnknown=false;curSig=JSON.stringify(c);
+}
+function useCfg(w){if(!["study","quiz","test","game"].includes(w)||(w===curKey&&curSig===JSON.stringify(cfgOf(w))))return;curKey=w;rebuild()}
+function cfgLabel(c){return c.src==="custom"?"กำหนดเอง":typeof c.src==="number"&&c.src<M.tpls.length?M.tpls[c.src].n:"ทุกแบบการ์ด"}
+function cfgSave(m){store("fc.cfg",cfg);if(m===curKey){rebuild();render()}cfgAll()}
+function cfgRender(box){
+  const m=box.dataset.m,c=cfgOf(m);box.innerHTML="";
+  const d=mk("details");d.open=!!box._open;d.ontoggle=()=>{box._open=d.open};
+  d.appendChild(mk("summary",null,"⚙ ตั้งค่า: "+cfgLabel(c)+(M.decks.length>1?" · "+(c.dk?validDk(c.dk).length+"/"+M.decks.length+" บท":"ทุกบท"):"")));
+  const sel=mk("select"),lab=mk("label",null,"ใช้การ์ดจาก");sel.id=(box.id||"cfg"+m)+"S";lab.htmlFor=sel.id;
+  [["all","ทุกแบบการ์ด"],...M.tpls.map((t,i)=>[String(i),"แบบ: "+t.n]),["custom","กำหนดเอง (เลือกช่องหน้า–หลังเอง)"]].forEach(([v,t])=>{const o=mk("option",null,t);o.value=v;sel.appendChild(o)});
+  sel.value=c.src==="custom"?"custom":typeof c.src==="number"&&c.src<M.tpls.length?String(c.src):"all";
+  sel.onchange=()=>{const v=sel.value;cfg[m]={src:v==="all"||v==="custom"?v:+v,f:c.f||[0],b:c.b||[M.fields.length>1?1:0],dk:c.dk};cfgSave(m)};
+  d.append(lab,sel);
+  if(c.src==="custom")[["f","ด้านหน้าแสดง"],["b","ด้านหลังแสดง"]].forEach(([k,t])=>{
+    const g=mk("div");g.style.marginTop="8px";g.appendChild(mk("div","hint",t+":"));
+    M.fields.forEach((f,i)=>{
+      const l=mk("label"),x=mk("input");l.style.cssText="display:inline-flex;gap:6px;align-items:center;margin:4px 12px 0 0";x.type="checkbox";x.checked=validF(c[k]).includes(i);
+      x.onchange=()=>{const a=validF(c[k]);c[k]=x.checked?[...a,i].sort((p,q)=>p-q):a.filter(y=>y!==i);cfgSave(m)};
+      l.append(x,document.createTextNode(f));g.appendChild(l);
+    });d.appendChild(g);
+  });
+  if(M.decks.length>1){
+    const g=mk("div");g.style.marginTop="8px";g.appendChild(mk("div","hint","บทที่ใช้:"));const cur=validDk(c.dk);
+    const setSel=a=>{if(!a.length){cfgAll();return}const cc=cfg[m]=cfg[m]||{src:"all"};if(a.length===M.decks.length)delete cc.dk;else cc.dk=a;cfgSave(m)};
+    const chk=(label,on,fn,ind)=>{const l=mk("label"),x=mk("input");l.style.cssText="display:inline-flex;gap:6px;align-items:center;margin:4px 12px 0 "+(ind?"16px":"0");x.type="checkbox";x.checked=on;x.onchange=()=>fn(x.checked);l.append(x,document.createTextNode(label));g.appendChild(l)};
+    const tog=(ids,on)=>setSel(on?[...new Set([...cur,...ids])]:cur.filter(y=>!ids.includes(y)));
+    M.folders.forEach(f=>{const ds=M.decks.filter(x=>x.fo===f.id);if(!ds.length)return;const ids=ds.map(x=>x.id);g.appendChild(mk("br"));chk("📁 "+f.name,ids.every(i=>cur.includes(i)),on=>tog(ids,on));ds.forEach(x=>chk(x.name,cur.includes(x.id),on=>tog([x.id],on),1))});
+    const un=M.decks.filter(x=>!x.fo);if(un.length){if(M.folders.length)g.appendChild(mk("br"));un.forEach(x=>chk(x.name,cur.includes(x.id),on=>tog([x.id],on)))}
+    d.appendChild(g);
+  }
+  box.appendChild(d);
+}
+function cfgAll(){document.querySelectorAll(".cfg").forEach(cfgRender)}
+function normDecks(){if(!Array.isArray(M.decks)||!M.decks.length)M.decks=[{id:"d1",name:"บทที่ 1"}];if(!Array.isArray(M.folders))M.folders=[];const fi=new Set(M.folders.map(x=>x.id));M.decks.forEach(d=>{if(!fi.has(d.fo))d.fo=""});const ids=new Set(M.decks.map(d=>d.id)),f=M.decks[0].id;M.notes.forEach(n=>{if(!ids.has(n.dk))n.dk=f})}
+function addDeckOptions(sel){
+  M.decks.filter(d=>!d.fo).forEach(d=>{const o=mk("option",null,d.name);o.value=d.id;sel.appendChild(o)});
+  M.folders.forEach(f=>{const ds=M.decks.filter(d=>d.fo===f.id);if(!ds.length)return;const g=mk("optgroup");g.label="📁 "+f.name;ds.forEach(d=>{const o=mk("option",null,d.name);o.value=d.id;g.appendChild(o)});sel.appendChild(g)});
+}
+function impToggle(){const nw=$("#impDeck").value==="__new";$("#impNewBox").classList.toggle("hide",!nw);$("#impFoNew").classList.toggle("hide",!nw||$("#impFo").value!=="__new")}
+function impDeckRender(){
+  const s=$("#impDeck"),cur=s.value,f=$("#impFo"),cf=f.value;s.innerHTML="";f.innerHTML="";
+  addDeckOptions(s);const o=mk("option",null,"+ สร้างบทใหม่…");o.value="__new";s.appendChild(o);
+  [["","ไม่มีโฟลเดอร์"],...M.folders.map(x=>[x.id,"📁 "+x.name]),["__new","+ โฟลเดอร์ใหม่…"]].forEach(([v,t])=>{const q=mk("option",null,t);q.value=v;f.appendChild(q)});
+  s.value=cur&&[...s.options].some(x=>x.value===cur)?cur:M.decks[0].id;f.value=[...f.options].some(x=>x.value===cf)?cf:"";impToggle();
+}
+$("#impDeck").onchange=impToggle;$("#impFo").onchange=impToggle;
+function refresh(){normDecks();rebuild();store("fc.cards",cards);render();cfgAll();impDeckRender();$("#impMap").textContent="ลำดับช่องสำหรับนำเข้า: "+M.fields.map((f,i)=>(i+1)+" "+f).join(" · ")}
+function sure(b,label,fn){
+  if(b._o!==undefined){b.textContent=b._o;b._o=undefined;fn();return}
+  b._o=b.textContent;b.textContent=label;setTimeout(()=>{if(b._o!==undefined){b.textContent=b._o;b._o=undefined}},4000);
+}
+function fdRender(){
+  const box=$("#fdList");box.innerHTML="";
+  M.fields.forEach((f,i)=>{
+    const r=mk("div","row"),inp=mk("input"),d=mk("button","sm dont","🗑 ลบ");r.style.cssText="align-items:center;margin:0 0 6px";
+    inp.type="text";inp.value=f;inp.setAttribute("aria-label","ชื่อช่อง "+(i+1));
+    inp.onchange=()=>{const v=inp.value.trim();if(v){M.fields[i]=v;refresh();tpRender();nwRender()}else inp.value=M.fields[i]};
+    d.onclick=()=>{if(M.fields.length<2){mgMsg("ต้องมีอย่างน้อย 1 ช่อง");return}
+      sure(d,"กดอีกครั้ง (ข้อมูลช่องนี้จะหาย)",()=>{
+        M.fields.splice(i,1);M.notes.forEach(n=>n.f.splice(i,1));
+        M.tpls.forEach(tp=>["f","b"].forEach(k=>{tp[k]=tp[k].filter(x=>x!==i).map(x=>x>i?x-1:x)}));refresh();mgAll()})};
+    r.append(inp,d);box.appendChild(r);
+  });
+}
+function tpRender(){
+  const box=$("#tpList");box.innerHTML="";const n0=M.notes[0];
+  M.tpls.forEach((tp,ti)=>{
+    const r=mk("div","rv"),nm=mk("input");nm.type="text";nm.value=tp.n;nm.setAttribute("aria-label","ชื่อแบบการ์ด");
+    nm.onchange=()=>{tp.n=nm.value.trim()||tp.n;refresh()};r.appendChild(nm);
+    [["f","ด้านหน้าแสดง"],["b","ด้านหลังแสดง"]].forEach(([k,lab])=>{
+      const g=mk("div");g.style.marginTop="8px";g.appendChild(mk("div","hint",lab+":"));
+      M.fields.forEach((f,i)=>{
+        const l=mk("label"),c=mk("input");l.style.cssText="display:inline-flex;gap:6px;align-items:center;margin:4px 12px 0 0";c.type="checkbox";c.checked=tp[k].includes(i);
+        c.onchange=()=>{tp[k]=c.checked?[...tp[k],i].sort((a,b)=>a-b):tp[k].filter(x=>x!==i);refresh();tpRender()};
+        l.append(c,document.createTextNode(f));g.appendChild(l);
+      });r.appendChild(g);
+    });
+    if(n0)r.appendChild(mk("p","hint","ตัวอย่าง: "+(joinF(n0,tp.f)||"(ว่าง)")+"  →  "+(joinF(n0,tp.b)||"(ว่าง)")));
+    const d=mk("button","sm dont","🗑 ลบแบบนี้");
+    d.onclick=()=>{if(M.tpls.length<2){mgMsg("ต้องมีอย่างน้อย 1 แบบการ์ด");return}M.tpls.splice(ti,1);M.notes.forEach(n=>n.k.splice(ti,1));refresh();tpRender()};
+    r.appendChild(d);box.appendChild(r);
+  });
+}
+const deckOf=id=>M.decks.find(d=>d.id===id)||{};
+const inFilter=(n,fd)=>!fd||(fd.startsWith("f:")?deckOf(n.dk).fo===fd.slice(2):n.dk===fd);
+const foOpts=sel=>[["","ไม่มีโฟลเดอร์"],...M.folders.map(x=>[x.id,"📁 "+x.name])].forEach(([v,t])=>{const o=mk("option",null,t);o.value=v;sel.appendChild(o)});
+function dkRender(){
+  const box=$("#dkList");box.innerHTML="";
+  const fs=$("#dkNewFo"),cf=fs.value;fs.innerHTML="";foOpts(fs);fs.value=M.folders.some(x=>x.id===cf)?cf:"";
+  const deckRow=(d,ind)=>{
+    const r=mk("div","row"),inp=mk("input"),sel=mk("select"),del=mk("button","sm dont","🗑 ลบ"),cnt=M.notes.filter(n=>n.dk===d.id).length,c=mk("span","hint",cnt+" โน้ต");
+    r.style.cssText="align-items:center;margin:0 0 6px "+(ind?"16px":"0");inp.type="text";inp.value=d.name;inp.setAttribute("aria-label","ชื่อบท");
+    inp.onchange=()=>{const v=inp.value.trim();if(v){d.name=v;refresh();mgAll()}else inp.value=d.name};
+    foOpts(sel);sel.value=d.fo||"";sel.setAttribute("aria-label","โฟลเดอร์ของบท "+d.name);sel.onchange=()=>{d.fo=sel.value;refresh();mgAll()};
+    del.onclick=()=>{if(M.decks.length<2){mgMsg("ต้องมีอย่างน้อย 1 บท");return}
+      sure(del,"กดอีกครั้ง (โน้ต "+cnt+" ใบในบทนี้จะถูกลบ)",()=>{M.notes=M.notes.filter(n=>n.dk!==d.id);M.decks=M.decks.filter(x=>x!==d);mgSnap=null;refresh();mgAll()})};
+    r.append(inp,sel,c,del);box.appendChild(r);
+  };
+  M.folders.forEach((f,fi)=>{
+    const r=mk("div","row"),inp=mk("input"),del=mk("button","sm dont","🗑 ลบโฟลเดอร์"),ds=M.decks.filter(d=>d.fo===f.id);
+    r.style.cssText="align-items:center;margin:10px 0 6px";inp.type="text";inp.value=f.name;inp.setAttribute("aria-label","ชื่อโฟลเดอร์");
+    inp.onchange=()=>{const v=inp.value.trim();if(v){f.name=v;refresh();mgAll()}else inp.value=f.name};
+    del.onclick=()=>{M.decks.forEach(d=>{if(d.fo===f.id)d.fo=""});M.folders.splice(fi,1);refresh();mgAll();mgMsg("ลบโฟลเดอร์แล้ว บทข้างในย้ายไปอยู่นอกโฟลเดอร์")};
+    r.append(mk("span",null,"📁"),inp,mk("span","hint",ds.length+" บท"),del);box.appendChild(r);
+    if(!ds.length){const h=mk("div","hint","(ยังไม่มีบทในโฟลเดอร์นี้ เลือกโฟลเดอร์ที่บทด้านล่างเพื่อย้ายเข้ามา)");h.style.marginLeft="16px";box.appendChild(h)}
+    ds.forEach(d=>deckRow(d,1));
+  });
+  const un=M.decks.filter(d=>!d.fo);
+  if(un.length){if(M.folders.length){const h=mk("div","hint","ไม่มีโฟลเดอร์");h.style.margin="10px 0 6px";box.appendChild(h)}un.forEach(d=>deckRow(d,0))}
+}
+function nwRender(){
+  const f=$("#nwForm");f.innerHTML="";
+  const dl=mk("label",null,"บท"),ds=mk("select");ds.id="nwDeck";dl.htmlFor=ds.id;
+  addDeckOptions(ds);const fv=$("#mgDk").value;
+  ds.value=M.decks.some(d=>d.id===nwDk)?nwDk:(fv&&!fv.startsWith("f:")?fv:M.decks[0].id);ds.onchange=()=>{nwDk=ds.value};f.append(dl,ds);
+  M.fields.forEach((nm,i)=>{
+    const l=mk("label",null,nm),x=mk("input");x.type="text";x.id="nw"+i;l.htmlFor=x.id;x.autocomplete="off";
+    if(i===M.fields.length-1)x.onkeydown=e=>{if(e.key==="Enter")nwAdd()};f.append(l,x);
+  });
+}
+function nwAdd(){
+  const v=M.fields.map((_,i)=>$("#nw"+i).value.trim());if(!v.some(Boolean))return;
+  nwDk=$("#nwDeck").value;M.notes.push({f:v,k:[],dk:nwDk});mgSnap=null;refresh();nwRender();mgRender();$("#nw0").focus();
+}
+const dkName=id=>(M.decks.find(d=>d.id===id)||{}).name||"";
+function mgRender(){
+  const ds=$("#mgDk"),cur=ds.value;ds.innerHTML="";const a=mk("option",null,"แสดงทุกบท");a.value="";ds.appendChild(a);
+  M.folders.forEach(f=>{const o=mk("option",null,"📁 "+f.name+" (ทั้งโฟลเดอร์)");o.value="f:"+f.id;ds.appendChild(o)});addDeckOptions(ds);ds.value=[...ds.options].some(x=>x.value===cur)?cur:"";
+  $("#mgCount").textContent="โน้ต "+M.notes.length+" · การ์ดที่ใช้ได้ "+cards.length;$("#mgUndo").classList.toggle("hide",!mgSnap);
+  const q=$("#mgQ").value.trim().toLowerCase(),box=$("#mgList"),fd=ds.value;box.innerHTML="";
+  if(!M.notes.length){box.appendChild(mk("div","empty","ยังไม่มีโน้ต เพิ่มด้านบน หรือไปที่แท็บ “นำเข้า”"));return}
+  M.notes.forEach((n,i)=>{
+    if(i!==mgEdit&&(!inFilter(n,fd)||(q&&!n.f.join(" ").toLowerCase().includes(q))))return;
+    const r=mk("div","rv"),b=mk("div","ctl two");b.style.marginTop="8px";
+    if(i===mgEdit){
+      const ins=M.fields.map((nm,j)=>{const l=mk("label",null,nm),x=mk("input");x.type="text";x.value=n.f[j]||"";x.id="ed"+j;l.htmlFor=x.id;r.append(l,x);return x});
+      const dl=mk("label",null,"บท"),dsel=mk("select");dsel.id="edDk";dl.htmlFor="edDk";addDeckOptions(dsel);dsel.value=n.dk;r.append(dl,dsel);
+      const sv=mk("button","primary","บันทึก"),c=mk("button",null,"ยกเลิก");
+      sv.onclick=()=>{n.f=ins.map(x=>x.value.trim());n.dk=dsel.value;mgEdit=-1;refresh();mgRender()};c.onclick=()=>{mgEdit=-1;mgRender()};b.append(sv,c);r.appendChild(b);
+    }else{
+      const t=mk("div",null,n.f.filter(Boolean).join("  ·  ")),tag=mk("div","hint","บท: "+dkName(n.dk)),e=mk("button",null,"✎ แก้ไข"),d=mk("button","dont","🗑 ลบ");t.style.wordBreak="break-word";
+      e.onclick=()=>{mgEdit=i;mgRender()};d.onclick=()=>{mgSnap=JSON.stringify(M.notes);M.notes.splice(i,1);mgEdit=-1;refresh();mgRender()};
+      b.append(e,d);r.append(t,tag,b);
+    }
+    box.appendChild(r);
+  });
+}
+function mgAll(){dkRender();fdRender();tpRender();nwRender();mgRender()}
+$("#fdAdd").onclick=()=>{const v=$("#fdNew").value.trim();if(!v)return;M.fields.push(v);M.notes.forEach(n=>n.f.push(""));$("#fdNew").value="";refresh();mgAll()};
+$("#tpAdd").onclick=()=>{M.tpls.push({n:"แบบที่ "+(M.tpls.length+1),f:[0],b:[M.fields.length>1?1:0]});refresh();tpRender()};
+$("#tpJp").onclick=()=>{
+  const go=()=>{
+    ["คันจิ","คำอ่าน","คำแปล"].forEach((nm,i)=>{if(i<M.fields.length)M.fields[i]=nm;else{M.fields.push(nm);M.notes.forEach(n=>n.f.push(""))}});
+    M.tpls=[{n:"คันจิ → คำอ่าน",f:[0],b:[1]},{n:"คันจิ → คำแปล",f:[0],b:[2]},{n:"คำแปล → คันจิ",f:[2],b:[0,1]}];
+    M.notes.forEach(n=>n.k=[]);refresh();mgAll();mgMsg("ตั้งค่าแล้ว: ช่อง คันจิ / คำอ่าน / คำแปล และ 3 แบบการ์ด (สถานะ “จำได้” เดิมถูกรีเซ็ต)");
+  };
+  if(M.notes.length)sure($("#tpJp"),"กดอีกครั้งเพื่อยืนยัน (เปลี่ยนชื่อช่องและแบบการ์ด)",go);else go();
+};
+$("#nwAdd").onclick=nwAdd;$("#mgDk").onchange=mgRender;$("#foAdd").onclick=()=>{const v=$("#foNew").value.trim()||"โฟลเดอร์ "+(M.folders.length+1);M.folders.push({id:uid(),name:v});$("#foNew").value="";refresh();mgAll()};$("#dkAdd").onclick=()=>{const v=$("#dkNew").value.trim()||"บทที่ "+(M.decks.length+1);M.decks.push({id:uid(),name:v,fo:$("#dkNewFo").value});$("#dkNew").value="";refresh();mgAll()};$("#mgQ").oninput=mgRender;
+$("#mgUndo").onclick=()=>{if(!mgSnap)return;M.notes=JSON.parse(mgSnap);mgSnap=null;refresh();mgRender()};
+$("#mgClear").onclick=()=>{const f=$("#mgDk").value;if(M.notes.length)sure($("#mgClear"),"กดอีกครั้งเพื่อลบ"+(f?"โน้ตที่กรองอยู่":"ทั้งหมด"),()=>{mgSnap=JSON.stringify(M.notes);M.notes=M.notes.filter(n=>!inFilter(n,f));mgEdit=-1;refresh();mgRender()})};
+// ---- export / import json ----
+function dlFile(name,text,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([text],{type}));a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+const csvq=x=>/[",\r\n]/.test(x)?'"'+x.replace(/"/g,'""')+'"':x;
+$("#exCsv").onclick=()=>{const f=$("#mgDk").value,ns=M.notes.filter(n=>inFilter(n,f));if(!ns.length){mgMsg("ไม่มีโน้ตให้ส่งออก");return}dlFile("flashcards"+(f?"-"+(f.startsWith("f:")?(M.folders.find(x=>x.id===f.slice(2))||{}).name:dkName(f)):"")+".csv","\ufeff"+ns.map(n=>M.fields.map((_,i)=>csvq(n.f[i]||"")).join(",")).join("\r\n"),"text/csv;charset=utf-8");mgMsg("ส่งออก CSV "+ns.length+" โน้ตแล้ว")};
+$("#exJson").onclick=()=>{dlFile("flashcards.json",JSON.stringify({app:"flashcards",version:4,fields:M.fields,tpls:M.tpls,folders:M.folders,decks:M.decks,notes:M.notes},null,2),"application/json");mgMsg("ส่งออก JSON แล้ว")};
+function importJson(o,fname){
+  const rep=$("#impMode").value==="rep";let msg;
+  if(o&&Array.isArray(o.fields)&&Array.isArray(o.tpls)&&Array.isArray(o.notes)){
+    const of=(o.folders||[]).map(f=>({id:String(f.id),name:String(f.name)}));
+    const od=Array.isArray(o.decks)&&o.decks.length?o.decks.map(d=>({id:String(d.id),name:String(d.name),fo:String(d.fo||"")})):[{id:"d1",name:fname||"บทนำเข้า",fo:""}];
+    const nt=o.notes.map(n=>({f:(n.f||[]).map(String),k:n.k||[],dk:n.dk}));
+    if(rep)M={fields:o.fields.map(String),tpls:o.tpls,notes:nt,decks:od,folders:of};
+    else{
+      const map=o.fields.map(nm=>{nm=String(nm);let i=M.fields.indexOf(nm);if(i<0){M.fields.push(nm);M.notes.forEach(n=>n.f.push(""));i=M.fields.length-1}return i});
+      o.tpls.forEach(tp=>{if(!M.tpls.some(x=>x.n===tp.n))M.tpls.push({n:tp.n,f:tp.f.map(i=>map[i]),b:tp.b.map(i=>map[i])})});
+      const fm={};of.forEach(f=>{let x=M.folders.find(y=>y.name===f.name);if(!x){x={id:uid(),name:f.name};M.folders.push(x)}fm[f.id]=x.id});
+      const dm={};od.forEach(d=>{let x=M.decks.find(y=>y.name===d.name&&(y.fo||"")===(fm[d.fo]||""));if(!x){x={id:uid(),name:d.name,fo:fm[d.fo]||""};M.decks.push(x)}dm[d.id]=x.id});
+      nt.forEach(n=>{const f=M.fields.map(()=>"");n.f.forEach((v,i)=>f[map[i]]=v);M.notes.push({f,k:[],dk:dm[n.dk]||dm[od[0].id]})});
+    }
+    refresh();msg="นำเข้า "+nt.length+" โน้ต "+od.length+" บท "+of.length+" โฟลเดอร์ (รวม "+M.notes.length+" โน้ต "+cards.length+" การ์ด)";
+  }else{
+    const cs=Array.isArray(o)?o:o&&o.decks?o.decks.flatMap(d=>d.cards||[]):o&&o.cards||[];
+    const rows=cs.map(c=>[String(c.t??c.front??""),String(c.d??c.back??"")]).filter(r=>r[0].trim()&&r[1].trim());
+    if(rows.length){const dk=resolveDeck();msg=addRows(rows,rep,dk);afterImport(dk)}else msg="ไม่พบการ์ดในไฟล์ JSON";
+  }
+  $("#impMsg").textContent=msg;
+}
+
+autoSound=!!recall("fc.auto");
+const sv=recall("fc.anki");
+if(sv&&Array.isArray(sv.fields)&&Array.isArray(sv.notes)&&Array.isArray(sv.tpls))M=sv;
+else{
+  let list=[];const od=recall("fc.decks");
+  if(Array.isArray(od))od.forEach(d=>list.push(...(d.cards||[])));else{const c=recall("fc.cards");if(Array.isArray(c))list=c}
+  M.notes=list.map(c=>({f:[c.t,c.d],k:[c.k?1:0]}));
+}
+refresh();if(cards.length)tab("study");
+</script>
+</body>
+</html>
